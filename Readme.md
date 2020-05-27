@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Саша Калюжный](https://up.htmlacademy.ru/javascript/20/user/471971).
-* Наставник: `Неизвестно`.
+* Наставник: [Анастасия Шишова](https://htmlacademy.ru/profile/anashi).
 
 ---
 
