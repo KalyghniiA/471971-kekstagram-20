@@ -57,9 +57,9 @@ var generatePhotos = function (quantity) {
 
 var createPhotoElement = function (photo) {
   var photoElement = pictureTemplate.cloneNode(true);
-  photoElement.querySelector('.picture__img').src = photosArray[photo].url;
-  photoElement.querySelector('.picture__likes').textContent = photosArray[photo].likes;
-  photoElement.querySelector('.picture__comments').textContent = photosArray[photo].comments.length;
+  photoElement.querySelector('.picture__img').src = photo.url;
+  photoElement.querySelector('.picture__likes').textContent = photo.likes;
+  photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
   return photoElement;
 };
 
@@ -67,7 +67,7 @@ var createPhotoElements = function () {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < photosArray.length; i++) {
-    fragment.appendChild(createPhotoElement(i));
+    fragment.appendChild(createPhotoElement(photosArray[i]));
   }
   pictureContainer.appendChild(fragment);
 };
