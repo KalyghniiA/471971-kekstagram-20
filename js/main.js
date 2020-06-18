@@ -63,14 +63,14 @@ var createPhotoElement = function (photo) {
   return photoElement;
 };
 
-var createPhotoElements = function (photo) {
+var createPhotoElements = function () {
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < photo.length; i++) {
-    fragment.appendChild(createPhotoElement(photo[i]));
+  for (var i = 0; i < photos.length; i++) {
+    fragment.appendChild(createPhotoElement(photos[i]));
   }
   pictureContainer.appendChild(fragment);
 };
 
 photos = generatePhotos(QUANTITY_PHOTOS);
-createPhotoElements(photos);
+createPhotoElements();
