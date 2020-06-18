@@ -11,7 +11,7 @@ var COMMENT_AUTORS = ['Артем', 'Антон', 'Петр', 'Стас', 'Ко�
 var QUANTITY_PHOTOS = 25;
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 var pictureContainer = document.querySelector('.pictures');
-
+var photos = [];
 
 var getRandomInteger = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
@@ -26,10 +26,10 @@ var generateComment = function () {
   };
 };
 
-var generateArrayComments = function (quantity) {
+var generateComments = function (commentsCount) {
   var commentsArray = [];
 
-  for (var i = 0; i < quantity; i++) {
+  for (var i = 0; i < commentsCount; i++) {
     commentsArray.push(generateComment());
   }
 
@@ -41,7 +41,7 @@ var generatePhoto = function (number) {
     url: 'photos/' + number + '.jpg',
     description: ' описание фотографии',
     likes: getRandomInteger(15, 200),
-    comments: generateArrayComments(getRandomInteger(1, 5))
+    comments: generateComments(getRandomInteger(1, 5))
   };
 };
 
@@ -63,14 +63,14 @@ var createPhotoElement = function (photo) {
   return photoElement;
 };
 
-var createPhotoElements = function () {
+var createPhotoElements = function (photo) {
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < photosArray.length; i++) {
-    fragment.appendChild(createPhotoElement(photosArray[i]));
+  for (var i = 0; i < photo.length; i++) {
+    fragment.appendChild(createPhotoElement(photo[i]));
   }
   pictureContainer.appendChild(fragment);
 };
 
-var photosArray = generatePhotos(QUANTITY_PHOTOS);
-createPhotoElements();
+photos = generatePhotos(QUANTITY_PHOTOS);
+createPhotoElements(photos);
