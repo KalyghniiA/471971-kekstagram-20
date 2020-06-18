@@ -55,12 +55,12 @@ var generatePhotos = function (quantity) {
   return photos;
 };
 
-var createPhotoElement = function (number) {
-  var photo = pictureTemplate.cloneNode(true);
-  photo.querySelector('.picture__img').src = photosArray[number].url;
-  photo.querySelector('.picture__likes').textContent = photosArray[number].likes;
-  photo.querySelector('.picture__comments').textContent = photosArray[number].comments.length;
-  return photo;
+var createPhotoElement = function (photo) {
+  var photoElement = pictureTemplate.cloneNode(true);
+  photoElement.querySelector('.picture__img').src = photosArray[photo].url;
+  photoElement.querySelector('.picture__likes').textContent = photosArray[photo].likes;
+  photoElement.querySelector('.picture__comments').textContent = photosArray[photo].comments.length;
+  return photoElement;
 };
 
 var createPhotoElements = function () {
