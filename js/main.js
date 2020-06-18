@@ -46,13 +46,13 @@ var generatePhoto = function (number) {
 };
 
 var generatePhotos = function (quantity) {
-  var photos = [];
+  var photoArray = [];
 
   for (var i = 0; i < quantity; i++) {
-    photos.push(generatePhoto(i + 1));
+    photoArray.push(generatePhoto(i + 1));
   }
 
-  return photos;
+  return photoArray;
 };
 
 var createPhotoElement = function (photo) {
