@@ -1,33 +1,29 @@
 'use strict';
 
-var MESSAGE_ARRAY = ['Всё отлично!',
+var MESSAGES = ['Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
-var COMMENT_NAME = ['Артем', 'Антон', 'Петр', 'Стас', 'Коля', 'Ваня'];
+var COMMENT_AUTORS = ['Артем', 'Антон', 'Петр', 'Стас', 'Коля', 'Ваня'];
+var QUANTITY_PHOTOS = 25;
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 var pictureContainer = document.querySelector('.pictures');
-var fragment = document.createDocumentFragment();
-/* var getRandom = function (number) {
-  return Math.ceil(Math.random() * number);
-}; */
 
-var randomInteger = function (min, max) {
+
+var getRandomInteger = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
 };
 
 var generateComment = function () {
-  var comment = {};
-
-  comment.avatar = 'img/avatar-' + randomInteger(1, 6) + '.svg';
-  comment.message = MESSAGE_ARRAY[randomInteger(0, MESSAGE_ARRAY.length - 1)];
-  comment.name = COMMENT_NAME[randomInteger(0, COMMENT_NAME.length - 1)];
-
-  return comment;
+  return {
+    avatar: 'img/avatar-' + getRandomInteger(1, 6) + '.svg',
+    message: MESSAGES[getRandomInteger(0, MESSAGES.length - 1)],
+    name: COMMENT_AUTORS[getRandomInteger(0, COMMENT_AUTORS.length - 1)]
+  };
 };
 
 var generateArrayComments = function (quantity) {
@@ -41,17 +37,15 @@ var generateArrayComments = function (quantity) {
 };
 
 var generatePhoto = function (number) {
-  var photoObj = {};
-
-  photoObj.url = 'photos/' + number + '.jpg';
-  photoObj.description = ' описание фотографии';
-  photoObj.likes = randomInteger(15, 200);
-  photoObj.comments = generateArrayComments(randomInteger(1, 5));
-
-  return photoObj;
+  return {
+    url: 'photos/' + number + '.jpg',
+    description: ' описание фотографии',
+    likes: getRandomInteger(15, 200),
+    comments: generateArrayComments(getRandomInteger(1, 5))
+  };
 };
 
-var generateArrayPhoto = function (quantity) {
+var generatePhotos = function (quantity) {
   var photos = [];
 
   for (var i = 0; i < quantity; i++) {
@@ -61,18 +55,22 @@ var generateArrayPhoto = function (quantity) {
   return photos;
 };
 
-var photosArray = generateArrayPhoto(25);
-
-var createPhoto = function () {
-
-  for (var i = 0; i < photosArray.length; i++) {
-    var photo = pictureTemplate.cloneNode(true);
-    photo.querySelector('.picture__img').src = photosArray[i].url;
-    photo.querySelector('.picture__likes').textContent = photosArray[i].likes;
-    photo.querySelector('.picture__comments').textContent = photosArray[i].comments.length;
-    fragment.appendChild(photo);
-  }
-  return pictureContainer.appendChild(fragment);
+var createPhotoElement = function (number) {
+  var photo = pictureTemplate.cloneNode(true);
+  photo.querySelector('.picture__img').src = photosArray[number].url;
+  photo.querySelector('.picture__likes').textContent = photosArray[number].likes;
+  photo.querySelector('.picture__comments').textContent = photosArray[number].comments.length;
+  return photo;
 };
 
-createPhoto();
+var createPhotoElements = function () {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < photosArray.length; i++) {
+    fragment.appendChild(createPhotoElement(i));
+  }
+  pictureContainer.appendChild(fragment);
+};
+
+var photosArray = generatePhotos(QUANTITY_PHOTOS);
+createPhotoElements();
