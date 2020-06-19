@@ -12,6 +12,12 @@ var QUANTITY_PHOTOS = 25;
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 var pictureContainer = document.querySelector('.pictures');
 var photos = [];
+var pictureFullSize = document.querySelector('.big-picture');
+var commentTemplate = document.querySelector('#social__comment').content.querySelector('.social__comment');
+var commentBlock = pictureFullSize.querySelector('.social__comments');
+var commentCounter = document.querySelector('.social__comment-count');
+var commentUploadButton = document.querySelector('.comments-loader');
+var body = document.querySelector('body');
 
 var getRandomInteger = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
@@ -72,5 +78,60 @@ var createPhotoElements = function () {
   pictureContainer.appendChild(fragment);
 };
 
+var clearComment = function () {
+  while (commentBlock.firstChild) {
+    commentBlock.removeChild(commentBlock.firstChild);
+  }
+};
+
+var createCommentElement = function (comment) {
+
+  var commentElement = commentTemplate.cloneNode(true);
+  commentElement.querySelector('.social__picture').src = comment.avatar;
+  commentElement.querySelector('.social__picture').alt = comment.name;
+  commentElement.querySelector('.social__text').textContent = comment.message;
+
+  return commentElement;
+};
+
+var createCommentElements = function (comments) {
+  clearComment();
+
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < comments.length; i++) {
+    fragment.appendChild(createCommentElement(comments[i]));
+  }
+
+  commentBlock.appendChild(fragment);
+};
+
+var disableScroll = function () {
+  body.classList.add('modal-open');
+};
+
+var openedPictureFullSize = function (bigPhoto) {
+  pictureFullSize.classList.remove('hidden');
+  pictureFullSize.querySelector('.big-picture__img img').src = bigPhoto.url;
+  pictureFullSize.querySelector('.likes-count').textContent = bigPhoto.likes;
+  pictureFullSize.querySelector('.comments-count').textContent = bigPhoto.comments.length;
+  createCommentElements(bigPhoto.comments);
+  pictureFullSize.querySelector('.social__caption').textContent = bigPhoto.description;
+  disableScroll();
+};
+
+var hiddenCommentCounter = function () {
+  commentCounter.classList.add('hidden');
+};
+
+var hiddenCommentUploadButton = function () {
+  commentUploadButton.classList.add('hidden');
+};
+
 photos = generatePhotos(QUANTITY_PHOTOS);
 createPhotoElements();
+openedPictureFullSize(photos[0]);
+
+hiddenCommentCounter();
+hiddenCommentUploadButton();
+
