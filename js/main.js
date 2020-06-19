@@ -12,9 +12,9 @@ var QUANTITY_PHOTOS = 25;
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 var pictureContainer = document.querySelector('.pictures');
 var photos = [];
-var pictureFullSize = document.querySelector('.big-picture');
+var bigPhotoElement = document.querySelector('.big-picture');
 var commentTemplate = document.querySelector('#social__comment').content.querySelector('.social__comment');
-var commentBlock = pictureFullSize.querySelector('.social__comments');
+var commentBlock = bigPhotoElement.querySelector('.social__comments');
 var commentCounter = document.querySelector('.social__comment-count');
 var commentUploadButton = document.querySelector('.comments-loader');
 var body = document.querySelector('body');
@@ -110,28 +110,28 @@ var disableScroll = function () {
   body.classList.add('modal-open');
 };
 
-var openedPictureFullSize = function (bigPhoto) {
-  pictureFullSize.classList.remove('hidden');
-  pictureFullSize.querySelector('.big-picture__img img').src = bigPhoto.url;
-  pictureFullSize.querySelector('.likes-count').textContent = bigPhoto.likes;
-  pictureFullSize.querySelector('.comments-count').textContent = bigPhoto.comments.length;
+var openBigPhoto = function (bigPhoto) {
+  bigPhotoElement.classList.remove('hidden');
+  bigPhotoElement.querySelector('.big-picture__img img').src = bigPhoto.url;
+  bigPhotoElement.querySelector('.likes-count').textContent = bigPhoto.likes;
+  bigPhotoElement.querySelector('.comments-count').textContent = bigPhoto.comments.length;
   createCommentElements(bigPhoto.comments);
-  pictureFullSize.querySelector('.social__caption').textContent = bigPhoto.description;
+  bigPhotoElement.querySelector('.social__caption').textContent = bigPhoto.description;
   disableScroll();
 };
 
-var hiddenCommentCounter = function () {
+var hideCommentCounter = function () {
   commentCounter.classList.add('hidden');
 };
 
-var hiddenCommentUploadButton = function () {
+var hideCommentUploadButton = function () {
   commentUploadButton.classList.add('hidden');
 };
 
 photos = generatePhotos(QUANTITY_PHOTOS);
 createPhotoElements();
-openedPictureFullSize(photos[0]);
+openBigPhoto(photos[0]);
 
-hiddenCommentCounter();
-hiddenCommentUploadButton();
+hideCommentCounter();
+hideCommentUploadButton();
 
