@@ -9,6 +9,7 @@ var MESSAGES = ['Всё отлично!',
 
 var COMMENT_AUTORS = ['Артем', 'Антон', 'Петр', 'Стас', 'Коля', 'Ваня'];
 var QUANTITY_PHOTOS = 25;
+var DEFAULT__PHOTO__SIZE__VALUE = 100;
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 var pictureContainer = document.querySelector('.pictures');
 var photos = [];
@@ -130,8 +131,129 @@ var hideCommentUploadButton = function () {
 
 photos = generatePhotos(QUANTITY_PHOTOS);
 createPhotoElements();
-openBigPhoto(photos[0]);
+/* openBigPhoto(photos[0]); */
 
 hideCommentCounter();
 hideCommentUploadButton();
 
+var formFileUpload = document.querySelector('#upload-select-image');
+var controlFormOpen = formFileUpload.querySelector('#upload-file');
+var controlFormClose = formFileUpload.querySelector('#upload-cancel');
+var imageEditingForm = formFileUpload.querySelector('.img-upload__overlay');
+var pinSaturationEffect = formFileUpload.querySelector('.effect-level__pin');
+var controlScaleMin = formFileUpload.querySelector('.scale__control--smaller');
+var controlScaleMax = formFileUpload.querySelector('.scale__control--bigger');
+var controlScaleValue = formFileUpload.querySelector('.scale__control--value');
+var photoPreview = formFileUpload.querySelector('.img-upload__preview');
+var fieldsetEffectsPhoto = formFileUpload.querySelector('.img-upload__effects');
+var entryFieldHashtag = formFileUpload.querySelector('.text__hashtag');
+var buttonSubmit = formFileUpload.querySelector('#upload-submit');
+/* var wrongSymbolsRegExp = /\W/; */
+
+var assigningPhotoSizeValue = function(value) {
+  controlScaleValue.value = value + '%';
+  photoPreview.style = 'transform:scale(' + value / 100 + ');';
+};
+
+var changeEffectImage = function (evt) {
+  var optionEffect = 'effects__preview--' + evt.target.value;
+  photoPreview.className = 'img-upload__preview ' + optionEffect;
+};
+
+controlFormOpen.addEventListener('change', function (evt) {
+  evt.preventDefault();
+  body.classList.add('modal-open');
+  imageEditingForm.classList.remove('hidden');
+  assigningPhotoSizeValue(DEFAULT__PHOTO__SIZE__VALUE);
+});
+
+controlFormClose.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  body.classList.remove('modal-open');
+  imageEditingForm.classList.add('hidden');
+});
+
+controlScaleMin.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  var fieldValue = parseInt(controlScaleValue.value, 10);
+  if (fieldValue > 25) {
+    assigningPhotoSizeValue(fieldValue - 25);
+  }
+});
+
+controlScaleMax.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  var fieldValue = parseInt(controlScaleValue.value, 10);
+  if (fieldValue <= 75) {
+    assigningPhotoSizeValue(fieldValue + 25);
+  }
+});
+
+fieldsetEffectsPhoto.addEventListener('click', changeEffectImage);
+
+entryFieldHashtag.addEventListener('input', function () {
+  var splittedTags = entryFieldHashtag.value.split('#');
+  for (var i = 0; i < splittedTags.length; i++) {
+    var tag = splittedTags[i].toLowerCase();
+    var tagText = tag.slice(1);
+
+    var isHashTag = tag.charAt(0) === TAG_SYMBOL;
+    var isTagTooShort = tag.length === 1;
+    var isTagTooLong = splittedTags[i].length > TAG_MAX_LENGTH;
+    var isTagExists = acceptedTags.indexOf(tag) !== -1;
+    var isWrongTag = wrongSymbolsRegExp.test(tagText);
+
+    if (!isHashTag) {
+      return 'Это не хэштег!';
+    } else if (isTagTooShort) {
+      return 'Хэштег не может состоять только из «' + TAG_SYMBOL + '»';
+    } else if (isWrongTag) {
+      return 'Хэштег ' + tag + ' введен некорректно';
+    }
+
+    if (isTagTooLong) {
+      return 'Хэштег ' + tag + ' слишком длинный (лишние ' + (tag.length - TAG_MAX_LENGTH) + ' симв.)';
+    }
+
+    if (isTagExists) {
+      return 'Хэштег ' + tag + ' уже введен';
+    } else {
+      acceptedTags.push(tag);
+    }
+  }
+
+})
+/*
+  1) сделать массив из строк
+  2)
+*/
+
+
+/* for (var i = 0; i < splittedTags.length; i++) {
+  var tag = splittedTags[i].toLowerCase();
+  var tagText = tag.slice(1);
+
+  var isHashTag = tag.charAt(0) === TAG_SYMBOL;
+  var isTagTooShort = tag.length === 1;
+  var isTagTooLong = splittedTags[i].length > TAG_MAX_LENGTH;
+  var isTagExists = acceptedTags.indexOf(tag) !== -1;
+  var isWrongTag = wrongSymbolsRegExp.test(tagText);
+
+  if (!isHashTag) {
+    return 'Это не хэштег!';
+  } else if (isTagTooShort) {
+    return 'Хэштег не может состоять только из «' + TAG_SYMBOL + '»';
+  } else if (isWrongTag) {
+    return 'Хэштег ' + tag + ' введен некорректно';
+  }
+
+  if (isTagTooLong) {
+    return 'Хэштег ' + tag + ' слишком длинный (лишние ' + (tag.length - TAG_MAX_LENGTH) + ' симв.)';
+  }
+
+  if (isTagExists) {
+    return 'Хэштег ' + tag + ' уже введен';
+  } else {
+    acceptedTags.push(tag);
+  }
+} */
