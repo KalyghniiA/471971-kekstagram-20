@@ -10,6 +10,7 @@ var MESSAGES = ['Всё отлично!',
 var COMMENT_AUTORS = ['Артем', 'Антон', 'Петр', 'Стас', 'Коля', 'Ваня'];
 var QUANTITY_PHOTOS = 25;
 var DEFAULT__PHOTO__SIZE__VALUE = 100;
+var QUANTITY_HASTAG = 5;
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 var pictureContainer = document.querySelector('.pictures');
 var photos = [];
@@ -146,9 +147,9 @@ var controlScaleMax = formFileUpload.querySelector('.scale__control--bigger');
 var controlScaleValue = formFileUpload.querySelector('.scale__control--value');
 var photoPreview = formFileUpload.querySelector('.img-upload__preview');
 var fieldsetEffectsPhoto = formFileUpload.querySelector('.img-upload__effects');
-var entryFieldHashtag = formFileUpload.querySelector('.text__hashtag');
-var buttonSubmit = formFileUpload.querySelector('#upload-submit');
-/* var wrongSymbolsRegExp = /\W/; */
+var entryFieldHashtag = formFileUpload.querySelector('.text__hashtags');
+var buttonSubmit = formFileUpload.querySelector('.img-upload__submit');
+var wrongSymbolsRegExp = /^#([a-zA-ZА-Яа-я0-9\_]{1,19})$/;
 
 var assigningPhotoSizeValue = function(value) {
   controlScaleValue.value = value + '%';
@@ -192,36 +193,33 @@ controlScaleMax.addEventListener('click', function (evt) {
 fieldsetEffectsPhoto.addEventListener('click', changeEffectImage);
 
 entryFieldHashtag.addEventListener('input', function () {
-  var splittedTags = entryFieldHashtag.value.split('#');
-  for (var i = 0; i < splittedTags.length; i++) {
-    var tag = splittedTags[i].toLowerCase();
-    var tagText = tag.slice(1);
 
-    var isHashTag = tag.charAt(0) === TAG_SYMBOL;
-    var isTagTooShort = tag.length === 1;
-    var isTagTooLong = splittedTags[i].length > TAG_MAX_LENGTH;
-    var isTagExists = acceptedTags.indexOf(tag) !== -1;
-    var isWrongTag = wrongSymbolsRegExp.test(tagText);
+  var splitingTags = entryFieldHashtag.value.split(' ');
 
-    if (!isHashTag) {
-      return 'Это не хэштег!';
-    } else if (isTagTooShort) {
-      return 'Хэштег не может состоять только из «' + TAG_SYMBOL + '»';
-    } else if (isWrongTag) {
-      return 'Хэштег ' + tag + ' введен некорректно';
-    }
+  var splitingTagsFiltered = splitingTags.filter(function (el) {
+    return el != '';
+  });
 
-    if (isTagTooLong) {
-      return 'Хэштег ' + tag + ' слишком длинный (лишние ' + (tag.length - TAG_MAX_LENGTH) + ' симв.)';
-    }
+  if (splitingTagsFiltered.length >= QUANTITY_HASTAG) {
+    entryFieldHashtag.setCustomValidity('Максимальное количество хэштегов: ' + QUANTITY_HASTAG);
+  }
+  console.log(splitingTagsFiltered[0]);
+  console.log(!wrongSymbolsRegExp.test(splitingTagsFiltered[0]));
 
-    if (isTagExists) {
-      return 'Хэштег ' + tag + ' уже введен';
-    } else {
-      acceptedTags.push(tag);
+  for (var i = 0; i <= splitingTagsFiltered.length; i++) {
+    console.log(splitingTagsFiltered.length);
+    console.log(splitingTagsFiltered);
+    console.log(splitingTagsFiltered[i])
+    console.log(!wrongSymbolsRegExp.test(splitingTagsFiltered[i]));
+    if(!wrongSymbolsRegExp.test(splitingTagsFiltered[i])) {
+      entryFieldHashtag.setCustomValidity('Хэштег введен в неправильном формате: Хэштег начинается с #, в хэштеге должен быть один #, могут быть использованны только латинские, кирилические символы, цифры и символ _, максимальное количество символов: 20');
     }
   }
 
+});
+
+buttonSubmit.addEventListener('', function (evt) {
+  evt.preventDefault();
 })
 /*
   1) сделать массив из строк
@@ -229,31 +227,3 @@ entryFieldHashtag.addEventListener('input', function () {
 */
 
 
-/* for (var i = 0; i < splittedTags.length; i++) {
-  var tag = splittedTags[i].toLowerCase();
-  var tagText = tag.slice(1);
-
-  var isHashTag = tag.charAt(0) === TAG_SYMBOL;
-  var isTagTooShort = tag.length === 1;
-  var isTagTooLong = splittedTags[i].length > TAG_MAX_LENGTH;
-  var isTagExists = acceptedTags.indexOf(tag) !== -1;
-  var isWrongTag = wrongSymbolsRegExp.test(tagText);
-
-  if (!isHashTag) {
-    return 'Это не хэштег!';
-  } else if (isTagTooShort) {
-    return 'Хэштег не может состоять только из «' + TAG_SYMBOL + '»';
-  } else if (isWrongTag) {
-    return 'Хэштег ' + tag + ' введен некорректно';
-  }
-
-  if (isTagTooLong) {
-    return 'Хэштег ' + tag + ' слишком длинный (лишние ' + (tag.length - TAG_MAX_LENGTH) + ' симв.)';
-  }
-
-  if (isTagExists) {
-    return 'Хэштег ' + tag + ' уже введен';
-  } else {
-    acceptedTags.push(tag);
-  }
-} */
