@@ -36,6 +36,7 @@ var fieldsetEffectsPhoto = formFileUpload.querySelector('.img-upload__effects');
 var hashtagsInput = formFileUpload.querySelector('.text__hashtags');
 var buttonSubmit = formFileUpload.querySelector('.img-upload__submit');
 var currentEffect = null;
+var currentEffects = null;
 
 var getRandomInteger = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
@@ -206,7 +207,7 @@ var changeEffectImage = function (evt) {
     photoPreview.classList.remove(currentEffect.class);
   }
   currentEffect = effects[evt.target.value];
-
+  console.log(currentEffect);
   photoPreview.classList.add(currentEffect.class);
 };
 
@@ -288,9 +289,9 @@ var validationHashtags = function () {
 var gettingPinCoordinates = function (evt) {
   var pinCoordinates = getComputedStyle(pinSaturationEffect).left;
   var currnetSaturation = parseInt(pinCoordinates, 10) / parseInt(getComputedStyle(saturationFilterLine).width, 10);
-  var currentEffects = effects[evt.target.value];
-
-  return photoPreview.setAttribute('style', currentEffects.changeIntensity(currnetSaturation));
+  currentEffects = currentEffect;
+  console.log(currentEffects);
+  console.log(photoPreview.style.transform = currentEffects.changeIntensity(currnetSaturation));
 };
 
 
