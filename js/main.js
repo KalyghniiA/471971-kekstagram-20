@@ -34,15 +34,18 @@ var saturationFilterLine = formFileUpload.querySelector('.effect-level__line');
 var controlScaleMin = formFileUpload.querySelector('.scale__control--smaller');
 var controlScaleMax = formFileUpload.querySelector('.scale__control--bigger');
 var controlScaleValue = formFileUpload.querySelector('.scale__control--value');
-var photoPreview = formFileUpload.querySelector('.img-upload__preview');
+var photoPreview = formFileUpload.querySelector('.img-upload__preview img');
 var fieldsetEffectsPhoto = formFileUpload.querySelector('.img-upload__effects');
 var hashtagsInput = formFileUpload.querySelector('.text__hashtags');
 var buttonSubmit = formFileUpload.querySelector('.img-upload__submit');
 var saturationScale = formFileUpload.querySelector('.img-upload__effect-level');
-var currentEffect = null;
+var bigPhotoElementImage = bigPhotoElement.querySelector('.big-picture__img img');
+var bigPhotoElementLikes = bigPhotoElement.querySelector('.likes-count');
+var bigPhotoElementCommentsCounter = bigPhotoElement.querySelector('.comments-count');
+var bigPhotoElementCommentsText = bigPhotoElement.querySelector('.social__caption');
 var effects = {
   none: {
-    class: null,
+    class: '',
     changeIntensity: function () {
       return 'none';
     }
@@ -50,7 +53,7 @@ var effects = {
   chrome: {
     class: 'effects__preview--chrome',
     changeIntensity: function (value) {
-      return 'grayscale(' + parseFloat(value).toFixed(2) / 100 + ')';
+      return 'grayscale(' + parseFloat(value).toFixed(2) + ')';
     },
     minDepth: 0,
     maxDepth: 1
@@ -58,7 +61,7 @@ var effects = {
   sepia: {
     class: 'effects__preview--sepia',
     changeIntensity: function (value) {
-      return 'sepia(' + parseFloat(value).toFixed(2) / 100 + ')';
+      return 'sepia(' + parseFloat(value).toFixed(2) + ')';
     },
     minDepth: 0,
     maxDepth: 1
@@ -77,7 +80,7 @@ var effects = {
       return 'blur(' + (parseFloat(value).toFixed(2) * (this.maxDepth - this.minDepth) + this.minDepth) + 'px)';
     },
     minDepth: 0,
-    maxDepth: parseInt('3px', 10)
+    maxDepth: 3
   },
   heat: {
     class: 'effects__preview--heat',
@@ -88,6 +91,7 @@ var effects = {
     maxDepth: 3
   }
 };
+var currentEffect = effects.none;
 
 var getRandomInteger = function (min, max) {
   var rand = min + Math.random() * (max + 1 - min);
@@ -182,11 +186,11 @@ var disableScroll = function () {
 
 var openBigPhoto = function (bigPhoto) {
   bigPhotoElement.classList.remove('hidden');
-  bigPhotoElement.querySelector('.big-picture__img img').src = bigPhoto.url;
-  bigPhotoElement.querySelector('.likes-count').textContent = bigPhoto.likes;
-  bigPhotoElement.querySelector('.comments-count').textContent = bigPhoto.comments.length;
+  bigPhotoElementImage.src = bigPhoto.url;
+  bigPhotoElementLikes.textContent = bigPhoto.likes;
+  bigPhotoElementCommentsCounter.textContent = bigPhoto.comments.length;
   createCommentElements(bigPhoto.comments);
-  bigPhotoElement.querySelector('.social__caption').textContent = bigPhoto.description;
+  bigPhotoElementCommentsText.textContent = bigPhoto.description;
   disableScroll();
 };
 
@@ -198,24 +202,24 @@ var hideCommentUploadButton = function () {
   commentUploadButton.classList.add('hidden');
 };
 
-photos = generatePhotos(PHOTOS_COUNT);
-
 var applyPhotoScale = function (value) {
   controlScaleValue.value = value + '%';
   photoPreview.style.transform = 'scale(' + value / 100 + ');';
 };
 
-var changeEffectImage = function (evt) {
+var onChangeEffectImage = function (evt) {
   if (evt.target.classList.contains('effects__radio')) {
-    if (currentEffect) {
+    if (currentEffect !== effects.none) {
       photoPreview.classList.remove(currentEffect.class);
     }
     currentEffect = effects[evt.target.value];
-    photoPreview.classList.add(currentEffect.class);
-    photoPreview.removeAttribute('style');
-    saturationScale.classList.remove('hidden');
+    photoPreview.style.filter = currentEffect.changeIntensity(1);
+
     if (currentEffect === effects.none) {
       saturationScale.classList.add('hidden');
+    } else {
+      photoPreview.classList.add(currentEffect.class);
+      saturationScale.classList.remove('hidden');
     }
   }
 };
@@ -252,7 +256,7 @@ var effectsReload = function () {
   photoPreview.classList.remove('effects__preview--heat');
 };
 
-var reductionPhotoSize = function () {
+var decreasePhotoScale = function () {
   var fieldValue = parseInt(controlScaleValue.value, 10);
   if (fieldValue > MIN_SIZE_PHOTO) {
     applyPhotoScale(fieldValue - STEP_SIZE_PHOTO);
@@ -261,7 +265,7 @@ var reductionPhotoSize = function () {
 
 var increasePhotoScale = function () {
   var fieldValue = parseInt(controlScaleValue.value, 10);
-  if (fieldValue <= MAX_SIZE_PHOTO) {
+  if (fieldValue < MAX_SIZE_PHOTO) {
     applyPhotoScale(fieldValue + STEP_SIZE_PHOTO);
   }
 };
@@ -290,10 +294,12 @@ var validateHashtags = function () {
 
   for (var i = 0; i < hastags.length; i++) {
     if (isHashtagDoubled(hastags[i], uniqueHashtags)) {
-      return hashtagsInput.setCustomValidity('Хэштеги не должны повторяться');
+      hashtagsInput.setCustomValidity('Хэштеги не должны повторяться');
+      return;
     }
     if (!HASHTAG_PATTERN.test(hastags[i])) {
-      return hashtagsInput.setCustomValidity('Хэштег введен в неправильном формате: Хэштег начинается с #, в хэштеге должен быть один #, могут быть использованны только латинские, кирилические символы, цифры и символ _, максимальное количество символов: 20');
+      hashtagsInput.setCustomValidity('Хэштег введен в неправильном формате: Хэштег начинается с #, в хэштеге должен быть один #, могут быть использованны только латинские, кирилические символы, цифры и символ _, максимальное количество символов: 20');
+      return;
     }
   }
 
@@ -304,31 +310,43 @@ var onPinMouseDown = function () {
   if (currentEffect) {
     photoPreview.style.filter = 'none';
   }
-  var pinCoordinates = pinSaturationEffect.offsetLeft;
-  var currnetSaturation = pinCoordinates / saturationFilterLine.offsetWidth;
+  var currnetSaturation = pinSaturationEffect.offsetLeft / saturationFilterLine.offsetWidth;
   photoPreview.style.filter = currentEffect.changeIntensity(currnetSaturation);
 };
 
 
-controlFormOpen.addEventListener('change', openEditor);
+controlFormOpen.addEventListener('change', function () {
+  openEditor();
+});
 
-controlFormClose.addEventListener('click', closeEditor);
+controlFormClose.addEventListener('click', function () {
+  closeEditor();
+});
 
-controlScaleMin.addEventListener('click', reductionPhotoSize);
+controlScaleMin.addEventListener('click', function () {
+  decreasePhotoScale();
+});
 
-controlScaleMax.addEventListener('click', increasePhotoScale);
+controlScaleMax.addEventListener('click', function () {
+  increasePhotoScale();
+});
 
-fieldsetEffectsPhoto.addEventListener('click', changeEffectImage);
+fieldsetEffectsPhoto.addEventListener('click', onChangeEffectImage);
 
-hashtagsInput.addEventListener('input', validateHashtags);
+hashtagsInput.addEventListener('input', function () {
+  validateHashtags();
+});
 
-pinSaturationEffect.addEventListener('mouseup', onPinMouseDown);
+pinSaturationEffect.addEventListener('mouseup', function () {
+  onPinMouseDown();
+});
 
 
-buttonSubmit.addEventListener('', function (evt) {
+buttonSubmit.addEventListener('submit', function (evt) {
   evt.preventDefault();
 });
 
+photos = generatePhotos(PHOTOS_COUNT);
 createPhotoElements();
 hideCommentCounter();
 hideCommentUploadButton();
