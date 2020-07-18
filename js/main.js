@@ -38,6 +38,7 @@ var photoPreview = formFileUpload.querySelector('.img-upload__preview');
 var fieldsetEffectsPhoto = formFileUpload.querySelector('.img-upload__effects');
 var hashtagsInput = formFileUpload.querySelector('.text__hashtags');
 var buttonSubmit = formFileUpload.querySelector('.img-upload__submit');
+var saturationScale = formFileUpload.querySelector('.img-upload__effect-level');
 var currentEffect = null;
 var effects = {
   none: {
@@ -212,6 +213,10 @@ var changeEffectImage = function (evt) {
     currentEffect = effects[evt.target.value];
     photoPreview.classList.add(currentEffect.class);
     photoPreview.removeAttribute('style');
+    saturationScale.classList.remove('hidden');
+    if (currentEffect === effects.none) {
+      saturationScale.classList.add('hidden');
+    }
   }
 };
 
@@ -224,6 +229,7 @@ var onDocumentKeydown = function (evt) {
 var openEditor = function () {
   body.classList.add('modal-open');
   imageEditingForm.classList.remove('hidden');
+  saturationScale.classList.add('hidden');
   applyPhotoScale(DEFAULT_SCALE);
   document.addEventListener('keydown', onDocumentKeydown);
 };
@@ -295,6 +301,9 @@ var validateHashtags = function () {
 };
 
 var onPinMouseDown = function () {
+  if (currentEffect) {
+    photoPreview.style.filter = 'none';
+  }
   var pinCoordinates = pinSaturationEffect.offsetLeft;
   var currnetSaturation = pinCoordinates / saturationFilterLine.offsetWidth;
   photoPreview.style.filter = currentEffect.changeIntensity(currnetSaturation);
