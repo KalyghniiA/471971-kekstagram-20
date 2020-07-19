@@ -121,7 +121,8 @@ var generatePhoto = function (number) {
     url: 'photos/' + number + '.jpg',
     description: ' описание фотографии',
     likes: getRandomInteger(15, 200),
-    comments: generateComments(getRandomInteger(1, 5))
+    comments: generateComments(getRandomInteger(1, 5)),
+    alt: number - 1
   };
 };
 
@@ -138,6 +139,7 @@ var generatePhotos = function (quantity) {
 var createPhotoElement = function (photo) {
   var photoElement = pictureTemplate.cloneNode(true);
   photoElement.querySelector('.picture__img').src = photo.url;
+  photoElement.querySelector('.picture__img').alt = photo.alt;
   photoElement.querySelector('.picture__likes').textContent = photo.likes;
   photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
   return photoElement;
@@ -344,6 +346,12 @@ pinSaturationEffect.addEventListener('mouseup', function () {
 
 buttonSubmit.addEventListener('submit', function (evt) {
   evt.preventDefault();
+});
+
+pictureContainer.addEventListener('click', function (evt) {
+    openBigPhoto(photos[evt.target.alt]);
+    /* console.log(evt.target.alt); */
+
 });
 
 photos = generatePhotos(PHOTOS_COUNT);
