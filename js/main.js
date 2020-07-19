@@ -44,7 +44,7 @@ var bigPhotoElementLikes = bigPhotoElement.querySelector('.likes-count');
 var bigPhotoElementCommentsCounter = bigPhotoElement.querySelector('.comments-count');
 var bigPhotoElementCommentsText = bigPhotoElement.querySelector('.social__caption');
 var bigPhotoButtonClose = bigPhotoElement.querySelector('.big-picture__cancel');
-var bigPhotoInputComments = bigPhotoElement.querySelector('.social__footer-text');
+var commentsInput = bigPhotoElement.querySelector('.social__footer-text');
 var effects = {
   none: {
     class: '',
@@ -232,7 +232,7 @@ var onChangeEffectImage = function (evt) {
   }
 };
 
-var applyEffect = function(effect, intensity) {
+var applyEffect = function (effect, intensity) {
   if (currentEffect !== effects.none) {
     photoPreview.classList.remove(currentEffect.class);
   }
@@ -245,7 +245,7 @@ var applyEffect = function(effect, intensity) {
     photoPreview.classList.add(currentEffect.class);
     saturationScale.classList.remove('hidden');
   }
-}
+};
 
 var onDocumentKeydown = function (evt) {
   if (evt.key === 'Escape') {
@@ -253,7 +253,7 @@ var onDocumentKeydown = function (evt) {
   }
 };
 
-var onBigPhotoPressEsc = function(evt) {
+var onBigPhotoPressEsc = function (evt) {
   if (evt.key === 'Escape') {
     onCloseBigPhoto();
   }
@@ -336,7 +336,7 @@ var onPopapCancellationOfClosing = function (evt) {
   if (evt.key === 'Escape') {
     evt.stopPropagation();
   }
-}
+};
 
 controlFormOpen.addEventListener('change', function () {
   openEditor();
@@ -362,7 +362,7 @@ hashtagsInput.addEventListener('input', function () {
 
 hashtagsInput.addEventListener('keydown', onPopapCancellationOfClosing);
 
-bigPhotoInputComments.addEventListener('keydown', onPopapCancellationOfClosing);
+commentsInput.addEventListener('keydown', onPopapCancellationOfClosing);
 
 pinSaturationEffect.addEventListener('mouseup', function () {
   onPinMouseDown();
