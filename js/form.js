@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 'use strict';
 
 (function () {
@@ -12,6 +13,7 @@
   var imageEditingForm = formFileUpload.querySelector('.img-upload__overlay');
   var pinSaturationEffect = formFileUpload.querySelector('.effect-level__pin');
   var saturationFilterLine = formFileUpload.querySelector('.effect-level__line');
+  var depthFilterLine = formFileUpload.querySelector('.effect-level__depth');
   var controlScaleMin = formFileUpload.querySelector('.scale__control--smaller');
   var controlScaleMax = formFileUpload.querySelector('.scale__control--bigger');
   var controlScaleValue = formFileUpload.querySelector('.scale__control--value');
@@ -130,12 +132,45 @@
     }
   };
 
-  var onPinMouseDown = function () {
-    if (currentEffect) {
-      photoPreview.style.filter = 'none';
-    }
-    var currnetSaturation = pinSaturationEffect.offsetLeft / saturationFilterLine.offsetWidth;
-    photoPreview.style.filter = currentEffect.changeIntensity(currnetSaturation);
+  var onPinMouseDown = function (evt) {
+    var startCoords = {
+      x: evt.clientX
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX
+      };
+
+      startCoords = {
+        x: moveEvt.clientX
+      };
+      if (pinSaturationEffect.offsetLeft < 0) {
+        pinSaturationEffect.style.left = '0px';
+      }
+      if (pinSaturationEffect.offsetLeft > saturationFilterLine.offsetWidth) {
+        pinSaturationEffect.style.left = saturationFilterLine.offsetWidth + 'px';
+      }
+      if (pinSaturationEffect.offsetLeft >= 0 && pinSaturationEffect.offsetLeft <= saturationFilterLine.offsetWidth) {
+      pinSaturationEffect.style.left = (pinSaturationEffect.offsetLeft - shift.x) + 'px';
+      depthFilterLine.style.width = (pinSaturationEffect.offsetLeft - shift.x) + 'px';
+      }
+    };
+
+    var onPinMouseUp = function () {
+      document.removeEventListener('mousemove', onMouseMove);
+      if (currentEffect) {
+        photoPreview.style.filter = 'none';
+      }
+      var currnetSaturation = pinSaturationEffect.offsetLeft / saturationFilterLine.offsetWidth;
+      photoPreview.style.filter = currentEffect.changeIntensity(currnetSaturation);
+      document.removeEventListener('mouseup', onPinMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onPinMouseUp);
   };
 
   controlScaleMin.addEventListener('click', function () {
@@ -146,9 +181,7 @@
     increasePhotoScale();
   });
 
-  pinSaturationEffect.addEventListener('mouseup', function () {
-    onPinMouseDown();
-  });
+  pinSaturationEffect.addEventListener('mousedown', onPinMouseDown);
 
   controlFormOpen.addEventListener('change', function () {
     openEditor();
