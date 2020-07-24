@@ -2,5 +2,6 @@
 'use strict';
 
 (function () {
-  window.renderMoke.createPhotoElements();
+  var photos = window.data.photos(window.data.count);
+  window.posts.createPhoto(photos);
 })();

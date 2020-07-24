@@ -7,20 +7,20 @@
   var MIN_SIZE_PHOTO = 25;
   var MAX_SIZE_PHOTO = 100;
   var body = document.querySelector('body');
-  var formFileUpload = document.querySelector('#upload-select-image');
-  var controlFormOpen = formFileUpload.querySelector('#upload-file');
-  var controlFormClose = formFileUpload.querySelector('#upload-cancel');
-  var imageEditingForm = formFileUpload.querySelector('.img-upload__overlay');
-  var pinSaturationEffect = formFileUpload.querySelector('.effect-level__pin');
-  var saturationFilterLine = formFileUpload.querySelector('.effect-level__line');
-  var depthFilterLine = formFileUpload.querySelector('.effect-level__depth');
-  var controlScaleMin = formFileUpload.querySelector('.scale__control--smaller');
-  var controlScaleMax = formFileUpload.querySelector('.scale__control--bigger');
-  var controlScaleValue = formFileUpload.querySelector('.scale__control--value');
-  var photoPreview = formFileUpload.querySelector('.img-upload__preview img');
-  var fieldsetEffectsPhoto = formFileUpload.querySelector('.img-upload__effects');
-  var buttonSubmit = formFileUpload.querySelector('.img-upload__submit');
-  var saturationScale = formFileUpload.querySelector('.img-upload__effect-level');
+  var upload = document.querySelector('#upload-select-image');
+  var controlFormOpen = upload.querySelector('#upload-file');
+  var controlFormClose = upload.querySelector('#upload-cancel');
+  var imageEditingForm = upload.querySelector('.img-upload__overlay');
+  var pinSaturationEffect = upload.querySelector('.effect-level__pin');
+  var saturationFilterLine = upload.querySelector('.effect-level__line');
+  var depthFilterLine = upload.querySelector('.effect-level__depth');
+  var controlScaleMin = upload.querySelector('.scale__control--smaller');
+  var controlScaleMax = upload.querySelector('.scale__control--bigger');
+  var controlScaleValue = upload.querySelector('.scale__control--value');
+  var photoPreview = upload.querySelector('.img-upload__preview img');
+  var fieldsetEffectsPhoto = upload.querySelector('.img-upload__effects');
+  var buttonSubmit = upload.querySelector('.img-upload__submit');
+  var saturationScale = upload.querySelector('.img-upload__effect-level');
   var effects = {
     none: {
       class: '',
@@ -198,6 +198,6 @@
   fieldsetEffectsPhoto.addEventListener('click', onChangeEffectImage);
 
   window.form = {
-    formFileUpload: formFileUpload
+    upload: upload
   };
 })();

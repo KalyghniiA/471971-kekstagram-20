@@ -3,7 +3,7 @@
 (function () {
   var HASHTAG_PATTERN = /^#([a-zA-ZА-Яа-я0-9\_]{1,19})$/;
   var HASHTAGS_COUNT = 5;
-  var hashtagsInput = window.form.formFileUpload.querySelector('.text__hashtags');
+  var hashtagsInput = window.form.upload.querySelector('.text__hashtags');
 
   var isHashtagDoubled = function (hastag, uniqueHashtags) {
     if (!uniqueHashtags.includes(hastag)) {
@@ -41,19 +41,16 @@
     hashtagsInput.setCustomValidity('');
   };
 
-  var onPopapCancellationOfClosing = function (evt) {
-    if (evt.key === 'Escape') {
-      evt.stopPropagation();
-    }
-  };
+
 
   hashtagsInput.addEventListener('input', function () {
     validateHashtags();
   });
 
-  hashtagsInput.addEventListener('keydown', onPopapCancellationOfClosing);
+  hashtagsInput.addEventListener('keydown', function (evt) {
+    window.utils.pressEsc (evt, evt.stopPropogation);
+  }
+    );
 
-  window.validation = {
-    onPopapCancellationOfClosing: onPopapCancellationOfClosing
-  };
+
 })();
