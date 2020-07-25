@@ -29,17 +29,14 @@
 
     for (var i = 0; i < hastags.length; i++) {
       if (isHashtagDoubled(hastags[i], uniqueHashtags)) {
-        hashtagsInput.setCustomValidity('Хэштеги не должны повторяться');
-        return;
+        return hashtagsInput.setCustomValidity('Хэштеги не должны повторяться');
       }
       if (!HASHTAG_PATTERN.test(hastags[i])) {
-        hashtagsInput.setCustomValidity('Хэштег введен в неправильном формате: Хэштег начинается с #, в хэштеге должен быть один #, могут быть использованны только латинские, кирилические символы, цифры и символ _, максимальное количество символов: 20');
-        return;
+        return hashtagsInput.setCustomValidity('Хэштег введен в неправильном формате: Хэштег начинается с #, в хэштеге должен быть один #, могут быть использованны только латинские, кирилические символы, цифры и символ _, максимальное количество символов: 20');
       }
     }
 
-    hashtagsInput.setCustomValidity('');
-    return;
+    return hashtagsInput.setCustomValidity('');
   };
 
 
