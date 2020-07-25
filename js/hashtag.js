@@ -39,6 +39,7 @@
     }
 
     hashtagsInput.setCustomValidity('');
+    return;
   };
 
 
