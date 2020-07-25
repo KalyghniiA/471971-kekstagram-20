@@ -136,7 +136,8 @@
     var startCoords = {
       x: evt.clientX
     };
-
+    var PIN_X_COORD_MIN = saturationFilterLine.getBoundingClientRect().x;
+    var PIN_X_COORD_MAX = saturationFilterLine.getBoundingClientRect().x + saturationFilterLine.offsetWidth;
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
@@ -147,25 +148,25 @@
       startCoords = {
         x: moveEvt.clientX
       };
-      if (pinSaturationEffect.offsetLeft < 0) {
+      if (moveEvt.clientX <= PIN_X_COORD_MIN) {
         pinSaturationEffect.style.left = '0px';
       }
-      if (pinSaturationEffect.offsetLeft > saturationFilterLine.offsetWidth) {
+      if (moveEvt.clientX >= PIN_X_COORD_MAX) {
         pinSaturationEffect.style.left = saturationFilterLine.offsetWidth + 'px';
       }
-      if (pinSaturationEffect.offsetLeft >= 0 && pinSaturationEffect.offsetLeft <= saturationFilterLine.offsetWidth) {
+      if (moveEvt.clientX > PIN_X_COORD_MIN && moveEvt.clientX < PIN_X_COORD_MAX) {
       pinSaturationEffect.style.left = (pinSaturationEffect.offsetLeft - shift.x) + 'px';
       depthFilterLine.style.width = (pinSaturationEffect.offsetLeft - shift.x) + 'px';
       }
-    };
-
-    var onPinMouseUp = function () {
-      document.removeEventListener('mousemove', onMouseMove);
       if (currentEffect) {
         photoPreview.style.filter = 'none';
       }
       var currnetSaturation = pinSaturationEffect.offsetLeft / saturationFilterLine.offsetWidth;
       photoPreview.style.filter = currentEffect.changeIntensity(currnetSaturation);
+    };
+
+    var onPinMouseUp = function () {
+      document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onPinMouseUp);
     };
 

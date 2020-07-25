@@ -26,7 +26,7 @@
 
   window.posts = {
     createPhoto: createPhotoElements
-  }
+  };
 })();
 
 

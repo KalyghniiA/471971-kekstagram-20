@@ -42,15 +42,14 @@
   };
 
 
-
   hashtagsInput.addEventListener('input', function () {
     validateHashtags();
   });
 
   hashtagsInput.addEventListener('keydown', function (evt) {
-    window.utils.pressEsc (evt, evt.stopPropogation);
+    window.utils.pressEsc(evt, evt.stopPropogation);
   }
-    );
+  );
 
 
 })();
