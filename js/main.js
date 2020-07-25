@@ -2,6 +2,6 @@
 'use strict';
 
 (function () {
-  var photos = window.data.photos(window.data.count);
-  window.posts.createPhoto(photos);
+  var photos = window.data.generate;
+  window.posts.createPhotos(photos);
 })();

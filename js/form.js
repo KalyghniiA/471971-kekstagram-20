@@ -14,6 +14,7 @@
   var pinSaturationEffect = upload.querySelector('.effect-level__pin');
   var saturationFilterLine = upload.querySelector('.effect-level__line');
   var depthFilterLine = upload.querySelector('.effect-level__depth');
+  var fieldLevelSaturation = upload.querySelector('.effect-level__value');
   var controlScaleMin = upload.querySelector('.scale__control--smaller');
   var controlScaleMax = upload.querySelector('.scale__control--bigger');
   var controlScaleValue = upload.querySelector('.scale__control--value');
@@ -100,6 +101,9 @@
   var onChangeEffectImage = function (evt) {
     if (evt.target.classList.contains('effects__radio')) {
       applyEffect(effects[evt.target.value], 1);
+      pinSaturationEffect.style.left = saturationFilterLine.offsetWidth + 'px';
+      depthFilterLine.style.width = saturationFilterLine.offsetWidth + 'px';
+      fieldLevelSaturation.value = 100;
     }
   };
 
@@ -132,37 +136,23 @@
     }
   };
 
-  var onPinMouseDown = function (evt) {
-    var startCoords = {
-      x: evt.clientX
-    };
+  var onPinMouseDown = function () {
+
     var PIN_X_COORD_MIN = saturationFilterLine.getBoundingClientRect().x;
     var PIN_X_COORD_MAX = saturationFilterLine.getBoundingClientRect().x + saturationFilterLine.offsetWidth;
     var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
+      var moveTo = moveEvt.clientX;
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX
-      };
+      moveTo = (moveTo <= PIN_X_COORD_MIN) ? PIN_X_COORD_MIN : moveTo;
+      moveTo = (moveTo >= PIN_X_COORD_MAX) ? PIN_X_COORD_MAX : moveTo;
+      moveTo -= PIN_X_COORD_MIN;
 
-      startCoords = {
-        x: moveEvt.clientX
-      };
-      if (moveEvt.clientX <= PIN_X_COORD_MIN) {
-        pinSaturationEffect.style.left = '0px';
-      }
-      if (moveEvt.clientX >= PIN_X_COORD_MAX) {
-        pinSaturationEffect.style.left = saturationFilterLine.offsetWidth + 'px';
-      }
-      if (moveEvt.clientX > PIN_X_COORD_MIN && moveEvt.clientX < PIN_X_COORD_MAX) {
-      pinSaturationEffect.style.left = (pinSaturationEffect.offsetLeft - shift.x) + 'px';
-      depthFilterLine.style.width = (pinSaturationEffect.offsetLeft - shift.x) + 'px';
-      }
-      if (currentEffect) {
-        photoPreview.style.filter = 'none';
-      }
+      pinSaturationEffect.style.left = moveTo + 'px';
+      depthFilterLine.style.width = moveTo + 'px';
+
       var currnetSaturation = pinSaturationEffect.offsetLeft / saturationFilterLine.offsetWidth;
       photoPreview.style.filter = currentEffect.changeIntensity(currnetSaturation);
+      fieldLevelSaturation.value = (currnetSaturation * 100).toFixed(2);
     };
 
     var onPinMouseUp = function () {

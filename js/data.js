@@ -48,11 +48,9 @@
     return photoArray;
   };
 
-  photos = generatePhotos(PHOTOS_COUNT);
 
   window.data = {
-    photos: generatePhotos,
-    count: PHOTOS_COUNT
+    generate: generatePhotos(PHOTOS_COUNT)
   };
 
 })();

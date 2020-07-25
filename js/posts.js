@@ -25,7 +25,7 @@
   };
 
   window.posts = {
-    createPhoto: createPhotoElements
+    createPhotos: createPhotoElements
   };
 })();
 
