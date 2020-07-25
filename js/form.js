@@ -152,7 +152,7 @@
 
       var currnetSaturation = pinSaturationEffect.offsetLeft / saturationFilterLine.offsetWidth;
       photoPreview.style.filter = currentEffect.changeIntensity(currnetSaturation);
-      fieldLevelSaturation.value = (currnetSaturation * 100).toFixed(2);
+      fieldLevelSaturation.value = (currnetSaturation * 100).toFixed(0);
     };
 
     var onPinMouseUp = function () {
