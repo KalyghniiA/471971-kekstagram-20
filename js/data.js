@@ -10,7 +10,6 @@
 
   var COMMENT_AUTORS = ['Артем', 'Антон', 'Петр', 'Стас', 'Коля', 'Ваня'];
   var PHOTOS_COUNT = 25;
-  var photos = [];
 
   var generateComment = function () {
     return {
