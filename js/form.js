@@ -124,6 +124,7 @@
 
   var decreasePhotoScale = function () {
     var fieldValue = parseInt(controlScaleValue.value, 10);
+
     if (fieldValue > MIN_SIZE_PHOTO) {
       applyPhotoScale(fieldValue - STEP_SIZE_PHOTO);
     }
@@ -131,6 +132,7 @@
 
   var increasePhotoScale = function () {
     var fieldValue = parseInt(controlScaleValue.value, 10);
+
     if (fieldValue < MAX_SIZE_PHOTO) {
       applyPhotoScale(fieldValue + STEP_SIZE_PHOTO);
     }
@@ -140,6 +142,7 @@
 
     var PIN_X_COORD_MIN = saturationFilterLine.getBoundingClientRect().x;
     var PIN_X_COORD_MAX = saturationFilterLine.getBoundingClientRect().x + saturationFilterLine.offsetWidth;
+
     var onMouseMove = function (moveEvt) {
       var moveTo = moveEvt.clientX;
 

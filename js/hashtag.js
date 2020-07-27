@@ -31,6 +31,7 @@
       if (isHashtagDoubled(hastags[i], uniqueHashtags)) {
         return hashtagsInput.setCustomValidity('Хэштеги не должны повторяться');
       }
+
       if (!HASHTAG_PATTERN.test(hastags[i])) {
         return hashtagsInput.setCustomValidity('Хэштег введен в неправильном формате: Хэштег начинается с #, в хэштеге должен быть один #, могут быть использованны только латинские, кирилические символы, цифры и символ _, максимальное количество символов: 20');
       }

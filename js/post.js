@@ -14,7 +14,6 @@
   var commentCounter = document.querySelector('.social__comment-count');
   var commentUploadButton = document.querySelector('.comments-loader');
 
-
   var open = function (bigPhoto) {
     bigPhotoElement.classList.remove('hidden');
     bigPhotoElementImage.src = bigPhoto.url;
@@ -88,6 +87,7 @@
   }
   );
   bigPhotoButtonClose.addEventListener('click', onCloseBigPhoto);
+
   hideCommentCounter();
   hideCommentUploadButton();
 
