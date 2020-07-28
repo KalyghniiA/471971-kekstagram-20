@@ -95,7 +95,8 @@
 
   var applyPhotoScale = function (value) {
     controlScaleValue.value = value + '%';
-    photoPreview.style.transform = 'scale(' + value / 100 + ');';
+    photoPreview.style.transform = 'scale(' + value / 100 + ')';
+
   };
 
   var onChangeEffectImage = function (evt) {
@@ -124,7 +125,6 @@
 
   var decreasePhotoScale = function () {
     var fieldValue = parseInt(controlScaleValue.value, 10);
-
     if (fieldValue > MIN_SIZE_PHOTO) {
       applyPhotoScale(fieldValue - STEP_SIZE_PHOTO);
     }
